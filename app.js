@@ -39,6 +39,10 @@ class Cell {
     render(text) {
         this.td.innerText = text;
     }
+
+    paint(bgcolor) {
+        this.td.style.backgroundColor = bgcolor;
+    }
 }
 document.addEventListener("DOMContentLoaded", function(){
     const trs = document.querySelectorAll('tr');
@@ -99,16 +103,6 @@ function startGame(isO) {
     }
 }
 
-function endGame(win) {
-    locked = true;
-    isGameEnd = true;
-    if (win) {
-        alert("You win !")
-    } else {
-        alert("You loose !")
-    }
-}
-
 const judgeLines = [
     [0,1,2],
     [3,4,5],
@@ -119,18 +113,21 @@ const judgeLines = [
     [0,4,8],
     [2,4,6]
 ];
+
 function judge(){
     console.log("judging...");
-    judgeLines.forEach(function(line){
+    judgeLines.forEach(function(line, i){
         console.log(line);
         const sum = cells[line[0]].score + cells[line[1]].score + cells[line[2]].score;
         console.log("score is " + sum);
-        if (sum === 3) {
-            endGame(true);
-            return true;
-        }
-        if (sum === -3) {
-            endGame(false);
+        if (sum === 3 || sum === -3) {
+            locked = true;
+            isGameEnd = true;
+            const won = (sum === 3);
+            const bgcolor = won ? 'forestgreen' : 'red';
+            line.forEach(function(cellID){
+                cells[cellID].paint(bgcolor);
+            });
             return true;
         }
     })
