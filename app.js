@@ -11,13 +11,6 @@ class Cell {
         this.score = 0;
     }
     markByMe() {
-        if (locked) {
-            return;
-        }
-        if (this.score !== 0) {
-            return;
-        }
-
         const text = (IamO ? "O" : "X");
         this.mark(1, text);
     }
@@ -35,6 +28,10 @@ class Cell {
         this.score = score;
         this.render(text);
     }
+
+    marked() {
+        return  this.score !== 0;
+    }
     
     render(text) {
         this.td.innerText = text;
@@ -44,6 +41,26 @@ class Cell {
         this.td.style.backgroundColor = bgcolor;
     }
 }
+
+function cellOnClick(cell) {
+    if (isGameEnd) {
+        return;
+    }
+    if (locked) {
+        return;
+    }
+    if (cell.marked()) {
+        return;
+    }
+    cell.markByMe();
+    locked = true;
+    const isEnd = judge();
+    if (isEnd) {
+        return;
+    }
+    playCPU();
+}
+
 document.addEventListener("DOMContentLoaded", function(){
     const trs = document.querySelectorAll('tr');
     trs.forEach(function(tr){
@@ -51,19 +68,7 @@ document.addEventListener("DOMContentLoaded", function(){
         tds.forEach(function(td){
             const cell = new Cell(td);
             td.addEventListener("click", function(){
-                if (isGameEnd) {
-                    return;
-                }
-                if (locked) {
-                    return;
-                }
-                cell.markByMe();
-                locked = true;
-                const isEnd = judge();
-                if (isEnd) {
-                    return;
-                }
-                playCPU();
+                cellOnClick(cell);
             });
             cells.push(cell);
         });
@@ -91,13 +96,12 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 
 function startGame(isO) {
-    console.log("game started:" + isO)
     IamO = isO;
     if (!isO) {
         setTimeout(function(){
             cells[4].markByCPU();
             locked = false;
-        }, 1000);
+        }, 500);
     } else {
         locked = false;
     }
@@ -114,10 +118,10 @@ const judgeLines = [
     [2,4,6]
 ];
 
+// return true if it ends.
 function judge(){
     console.log("judging...");
     judgeLines.forEach(function(line, i){
-        console.log(line);
         const sum = cells[line[0]].score + cells[line[1]].score + cells[line[2]].score;
         console.log("score is " + sum);
         if (sum === 3 || sum === -3) {
@@ -130,7 +134,7 @@ function judge(){
             });
             return true;
         }
-    })
+    });
     return false;
 }
 
