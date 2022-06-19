@@ -69,32 +69,40 @@ document.addEventListener("DOMContentLoaded", function(){
         let tds = tr.querySelectorAll("td");
         tds.forEach(function(td){
             const cell = new Cell(td);
-            td.addEventListener("click", function(){
+            const handler = function(){
                 cellOnClick(cell);
-            });
+            };
+            td.addEventListener("click", handler);
+            td.addEventListener("ontouchend", handler);
             Game.cells.push(cell);
         });
     });
 
-    document.getElementById("first").addEventListener("click", function(e){
+    const firstHandler = function(e){
         e.currentTarget.style.background = '#fefefe';
         theOtherStyle = document.getElementById("second").style;
         theOtherStyle.color = '#eee';
         theOtherStyle.background = '#ddd';
         theOtherStyle.border = 'dotted';
         startGame(true);
-    });
-    document.getElementById("second").addEventListener("click", function(e){
+    };
+    const secondHandler = function(e){
         e.currentTarget.style.background = '#fefefe';
         theOtherStyle = document.getElementById("first").style;
         theOtherStyle.color = '#eee';
         theOtherStyle.background = '#ddd';
         theOtherStyle.border = 'dotted';
         startGame(false);
-    });
-    document.getElementById("reset").addEventListener("click", function(){
+    };
+    const resetHandler = function(){
         location.reload();
-    });
+    };
+    document.getElementById("first").addEventListener("click", firstHandler);
+    document.getElementById("second").addEventListener("click", secondHandler);
+    document.getElementById("first").addEventListener("ontouchend", firstHandler);
+    document.getElementById("second").addEventListener("ontouchend", secondHandler);
+    document.getElementById("reset").addEventListener("click", resetHandler);
+    document.getElementById("reset").addEventListener("ontouchend", resetHandler);
 });
 
 function startGame(playFirst) {
