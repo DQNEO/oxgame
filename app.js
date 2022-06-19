@@ -1,9 +1,10 @@
-let cells = []; // array of 9 elements
-
-// game status
-let IamO;
-let locked = true;
-let isGameEnd = false;
+// Game status
+let Game = {
+    locked: true, // is UI locked
+    isEnd: false,
+    playFirst: true,
+    cells: [],// array of 9 elements
+};
 
 class Cell {
     constructor(td) {
@@ -11,7 +12,7 @@ class Cell {
         this.score = 0;
     }
     markByMe() {
-        const text = (IamO ? "O" : "X");
+        const text = (Game.playFirst ? "O" : "X");
         this.mark(1, text);
     }
 
@@ -20,7 +21,7 @@ class Cell {
             throw new Exception("internal error");
         }
 
-        const text = (IamO ? "X" : "O");
+        const text = (Game.playFirst ? "X" : "O");
         this.mark(-1, text);
     }
     
@@ -44,17 +45,17 @@ class Cell {
 }
 
 function cellOnClick(cell) {
-    if (isGameEnd) {
+    if (Game.isEnd) {
         return;
     }
-    if (locked) {
+    if (Game.locked) {
         return;
     }
     if (cell.marked()) {
         return;
     }
     cell.markByMe();
-    locked = true;
+    Game.locked = true;
     const isEnd = judge();
     if (isEnd) {
         return;
@@ -71,7 +72,7 @@ document.addEventListener("DOMContentLoaded", function(){
             td.addEventListener("click", function(){
                 cellOnClick(cell);
             });
-            cells.push(cell);
+            Game.cells.push(cell);
         });
     });
 
@@ -96,15 +97,15 @@ document.addEventListener("DOMContentLoaded", function(){
     });
 });
 
-function startGame(isO) {
-    IamO = isO;
-    if (!isO) {
+function startGame(playFirst) {
+    Game.playFirst = playFirst;
+    if (!playFirst) {
         setTimeout(function(){
-            cells[4].markByCPU();
-            locked = false;
+            Game.cells[4].markByCPU();
+            Game.locked = false;
         }, 500);
     } else {
-        locked = false;
+        Game.locked = false;
     }
 }
 
@@ -125,15 +126,15 @@ function judge(){
     judgeLines.forEach(function(line, i){
         let sum = 0;
         line.forEach(function(idx){
-            sum += cells[idx].score;
+            sum += Game.cells[idx].score;
         });
         console.log("score is " + sum);
         if (sum === 3 || sum === -3) {
-            locked = true;
-            isGameEnd = true;
+            Game.locked = true;
+            Game.isEnd = true;
             const won = (sum === 3);
             line.forEach(function(cellID){
-                cells[cellID].paint(won);
+                Game.cells[cellID].paint(won);
             });
             return true;
         }
@@ -142,19 +143,19 @@ function judge(){
 }
 
 function playCPU() {
-    locked = true;
-    if (isGameEnd) {
+    Game.locked = true;
+    if (Game.isEnd) {
         return;
     }
     console.log("CPU is thinking...");
     setTimeout(function(){
-        for (let i=0;i<cells.length;i++) {
-            const cell = cells[i];
+        for (let i=0;i<Game.cells.length;i++) {
+            const cell = Game.cells[i];
             if (cell.score === 0) {
                 cell.markByCPU();
                 const isEnd = judge();
                 if (!isEnd) {
-                    locked = false;
+                    Game.locked = false;
                 }
                 return;
             }
