@@ -142,6 +142,17 @@ function judge(){
     return false;
 }
 
+// find a random vacant cell and returns the cell
+function cpuStrategy1() {
+    for (let i=0;i<Game.cells.length;i++) {
+        const cell = Game.cells[i];
+        if (cell.score === 0) {
+            return cell;
+        }
+
+    }
+}
+
 function playCPU() {
     Game.locked = true;
     if (Game.isEnd) {
@@ -149,16 +160,12 @@ function playCPU() {
     }
     console.log("CPU is thinking...");
     setTimeout(function(){
-        for (let i=0;i<Game.cells.length;i++) {
-            const cell = Game.cells[i];
-            if (cell.score === 0) {
-                cell.markByCPU();
-                const isEnd = judge();
-                if (!isEnd) {
-                    Game.locked = false;
-                }
-                return;
-            }
+        const cell = cpuStrategy1();
+        cell.markByCPU();
+        const isEnd = judge();
+        if (!isEnd) {
+            Game.locked = false;
         }
+        return;
     }, 1500);
 }
