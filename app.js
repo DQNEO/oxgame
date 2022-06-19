@@ -130,7 +130,6 @@ function judge(){
         line.forEach(function(idx){
             sum += Game.cells[idx].score;
         });
-        console.log("score is " + sum);
         if (sum === 3 || sum === -3) {
             Game.locked = true;
             Game.isEnd = true;
@@ -150,6 +149,21 @@ function cpuStrategy() {
         return Game.cells[4];
     }
 
+    for (let i = 0;i<judgeLines.length;i++) {
+        let vacantCell = null;
+        let sum = 0;
+        judgeLines[i].forEach(function(idx){
+            const cell = Game.cells[idx];
+            sum += cell.score;
+            if (!cell.marked()) {
+                vacantCell = cell;
+            }
+        });
+        if (sum === 2) {
+            return vacantCell;
+        }
+    }
+    
     let vacantCells = [];
     for (let i=0;i<Game.cells.length;i++) {
         const cell = Game.cells[i];
