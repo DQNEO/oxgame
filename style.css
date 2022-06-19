@@ -8,6 +8,7 @@ button {
     height:50px;
     background: #ccc;
     font-color: white;
+    cursor: pointer;
 }
 table {
     background: #f0f0f0;
@@ -20,4 +21,5 @@ td {
     font-size: 130px;
     text-align: center;
     vertical-align: center;
+    cursor: pointer;
 }
