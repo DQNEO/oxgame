@@ -37,7 +37,8 @@ class Cell {
         this.td.innerText = text;
     }
 
-    paint(bgcolor) {
+    paint(won) {
+        const bgcolor = won ? 'forestgreen' : 'red';
         this.td.style.backgroundColor = bgcolor;
     }
 }
@@ -131,9 +132,8 @@ function judge(){
             locked = true;
             isGameEnd = true;
             const won = (sum === 3);
-            const bgcolor = won ? 'forestgreen' : 'red';
             line.forEach(function(cellID){
-                cells[cellID].paint(bgcolor);
+                cells[cellID].paint(won);
             });
             return true;
         }
