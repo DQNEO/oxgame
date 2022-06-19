@@ -122,7 +122,10 @@ const judgeLines = [
 function judge(){
     console.log("judging...");
     judgeLines.forEach(function(line, i){
-        const sum = cells[line[0]].score + cells[line[1]].score + cells[line[2]].score;
+        let sum = 0;
+        line.forEach(function(idx){
+            sum += cells[idx].score;
+        });
         console.log("score is " + sum);
         if (sum === 3 || sum === -3) {
             locked = true;
