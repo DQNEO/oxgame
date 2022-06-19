@@ -98,6 +98,8 @@ document.addEventListener("DOMContentLoaded", function(){
 });
 
 function startGame(playFirst) {
+    const tbl = document.getElementById("table");
+    tbl.className = 'started';
     Game.playFirst = playFirst;
     if (!playFirst) {
         setTimeout(function(){

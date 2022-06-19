@@ -10,8 +10,8 @@ button {
     font-color: white;
     cursor: pointer;
 }
+
 table {
-    background: #f0f0f0;
     margin: auto;
 }
 td {
@@ -22,4 +22,12 @@ td {
     text-align: center;
     vertical-align: center;
     cursor: pointer;
+}
+
+table.notstarted  {
+    background: white;
+}
+
+table.started  {
+    background: #f0f0f0;
 }
